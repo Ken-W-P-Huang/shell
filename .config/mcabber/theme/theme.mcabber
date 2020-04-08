@@ -1,0 +1,34 @@
+set color_background   = 237
+set color_general      = 188
+set color_log          = 188
+set color_info         = 188
+set color_msgin        = 188
+set color_msgout       = 188
+set color_msghl        = 009
+#statusline
+set color_bgstatus     = 148
+set color_status       = 22
+set color_roster       = 188
+set color_rostersel    = 231
+set color_bgrostersel  = 24
+set color_rosterselmsg = 231
+set color_rosternewmsg = 009
+set color_readmark     = 009
+
+# Reset dynamic colors
+color roster clear
+
+# Dynamic roster colors
+color roster f * yellow
+color roster o * green
+color roster d * 166
+color roster a * 140
+color roster n * 144
+color roster _ * 18
+
+# These colors will by used automatically:
+set nick_colors = green yellow white
+# This turns coloring of all mucs on:
+color muc * on
+# If you want someone's nick to be the same all the time:
+#color mucnick my_friend yellow

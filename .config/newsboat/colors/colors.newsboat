@@ -1,0 +1,7 @@
+color background          color7    color237
+color listnormal          color7    color237
+color listnormal_unread   color9    color237    bold
+color listfocus           color231  color24
+color listfocus_unread    color231  color24     bold
+color info                color22   color148    bold
+color article             color188  color237

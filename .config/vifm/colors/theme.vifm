@@ -1,0 +1,49 @@
+highlight clear
+"窗口整体
+highlight Win cterm=none ctermfg=188 ctermbg=237
+"第二个窗口
+highlight OtherWin cterm=none ctermfg=188 ctermbg=237
+highlight AuxWin cterm=bold,underline,standout ctermfg=default ctermbg=237
+"窗口边框
+highlight Border cterm=none ctermfg=188 ctermbg=black
+"选中行
+highlight CurrLine cterm=bold ctermfg=231 ctermbg=24
+highlight TopLine cterm=none ctermfg=148 ctermbg=148 
+highlight TopLineSel cterm=bold ctermfg=022 ctermbg=default
+"底部命令行
+highlight CmdLine cterm=none ctermfg=015 ctermbg=237
+"命令行按tab键出来的提示窗口
+highlight StatusLine cterm=bold ctermfg=015 ctermbg=237
+"提示窗口选中行
+highlight WildMenu cterm=bold ctermfg=231 ctermbg=238
+highlight ErrorMsg cterm=none ctermfg=009 ctermbg=237
+"和vim类似的tab栏
+highlight TabLine cterm=none ctermfg=188 ctermbg=237
+highlight TabLineSel cterm=bold ctermfg=231 ctermbg=024
+"highlight TabLineSel cterm=bold ctermfg=22 ctermbg=148
+":jobs
+highlight JobLine cterm=bold ctermfg=015 ctermbg=237
+highlight SuggestBox cterm=bold ctermfg=015 ctermbg=237
+highlight CmpMismatch cterm=bold ctermfg=015 ctermbg=237
+"目录
+highlight Directory cterm=bold ctermfg=cyan ctermbg=default
+highlight Link cterm=bold ctermfg=120 ctermbg=default
+highlight BrokenLink cterm=bold ctermfg=009 ctermbg=default
+highlight Socket cterm=bold ctermfg=188 ctermbg=default
+highlight Device cterm=bold ctermfg=009 ctermbg=default
+highlight Fifo cterm=bold ctermfg=cyan ctermbg=default
+"可执行文件
+highlight Executable cterm=bold ctermfg=188 ctermbg=default
+"Virtual模式下选中的行
+highlight Selected cterm=bold ctermfg=231 ctermbg=24
+"用于statusline的颜色
+highlight User1 ctermfg=022 ctermbg=148
+highlight User2 ctermfg=148 ctermbg=236
+highlight User3 ctermfg=247 ctermbg=236
+highlight User4 ctermfg=236 ctermbg=233
+highlight User5 ctermfg=231 ctermbg=233
+highlight User6 
+highlight User7 
+highlight User8 
+highlight User9 
+

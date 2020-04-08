@@ -1,0 +1,10 @@
+{
+	"optOut": false,
+	"lastUpdateCheck": 1585206569555,
+	"update": {
+		"latest": "6.14.4",
+		"current": "6.4.1",
+		"type": "minor",
+		"name": "npm"
+	}
+}

@@ -1,0 +1,26 @@
+ls
+q
+player-next
+refresh 
+bind common a add
+colorscheme theme
+colorscheme solarized-light
+colorscheme zenburn
+colorscheme aa
+colorscheme xterm-white
+colorscheme solarized-dark
+colorscheme night
+colorscheme jellybeans
+colorscheme gruvbox
+colorscheme gruvbox-alt
+colorscheme green
+colorscheme green-mono-88
+colorscheme gray-88
+colorscheme dracula
+colorscheme default
+cd ~/Music/网易云音乐/
+h
+o
+ls 
+add ~/Applications/q
+bind -f common ? search-b-start

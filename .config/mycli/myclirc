@@ -1,0 +1,125 @@
+# vi: ft=dosini
+[main]
+
+# Enables context sensitive auto-completion. If this is disabled the all
+# possible completions will be listed.
+smart_completion = True
+
+# Multi-line mode allows breaking up the sql statements into multiple lines. If
+# this is set to True, then the end of the statements must have a semi-colon.
+# If this is set to False then sql statements can't be split into multiple
+# lines. End of line (return) is considered as the end of the statement.
+multi_line = True
+
+# Destructive warning mode will alert you before executing a sql statement
+# that may cause harm to the database such as "drop table", "drop database"
+# or "shutdown".
+destructive_warning = True
+
+# log_file location.
+log_file = ~/.local/share/mycli/.mycli.log
+history_file = ~/.local/share/mycli/.mycli-history
+
+# Default log level. Possible values: "CRITICAL", "ERROR", "WARNING", "INFO"
+# and "DEBUG". "NONE" disables logging.
+#log_level = INFO
+
+# Log every query and its results to a file. Enable this by uncommenting the
+# line below.
+#audit_log = $XDG_DATA_HOME/mycli/.mycli-audit.log
+
+# Timing of sql statments and table rendering.
+timing = True
+
+# Table format. Possible values: ascii, double, github,
+# psql, plain, simple, grid, fancy_grid, pipe, orgtbl, rst, mediawiki, html,
+# latex, latex_booktabs, textile, moinmoin, jira, vertical, tsv, csv.
+# Recommended: ascii
+table_format = ascii
+
+# Syntax coloring style. Possible values (many support the "-dark" suffix):
+# manni, igor, xcode, vim, autumn, vs, rrt, native, perldoc, borland, tango, emacs,
+# friendly, monokai, paraiso, colorful, murphy, bw, pastie, paraiso, trac, default,
+# fruity.
+# Screenshots at http://mycli.net/syntax
+syntax_style = default
+
+# Keybindings: Possible values: emacs, vi.
+# Emacs mode: Ctrl-A is home, Ctrl-E is end. All emacs keybindings are available in the REPL.
+# When Vi mode is enabled you can use modal editing features offered by Vi in the REPL.
+key_bindings = vi 
+
+# Enabling this option will show the suggestions in a wider menu. Thus more items are suggested.
+wider_completion_menu = False
+
+# MySQL prompt
+# \D - The full current date
+# \d - Database name
+# \h - Hostname of the server
+# \m - Minutes of the current time
+# \n - Newline
+# \P - AM/PM
+# \p - Port
+# \R - The current time, in 24-hour military time (0–23)
+# \r - The current time, standard 12-hour time (1–12)
+# \s - Seconds of the current time
+# \t - Product type (Percona, MySQL, MariaDB)
+# \A - DSN alias name (from the [alias_dsn] section)
+# \u - Username
+prompt = '\t \u@\h:\d> '
+prompt_continuation = '-> '
+
+# Skip intro info on startup and outro info on exit
+less_chatty = False
+
+# Use alias from --login-path instead of host name in prompt
+login_path_as_host = False
+
+# Cause result sets to be displayed vertically if they are too wide for the current window,
+# and using normal tabular format otherwise. (This applies to statements terminated by ; or \G.)
+auto_vertical_output = False
+
+# keyword casing preference. Possible values "lower", "upper", "auto"
+keyword_casing = auto
+
+# disabled pager on startup
+enable_pager = True
+
+# Custom colors for the completion menu, toolbar, etc.
+[colors]
+completion-menu.completion.current = '#ffffff bg:#005f87'
+completion-menu.completion = '#a0a0a0 bg:#3a3a3a'
+completion-menu.meta.completion.current = '#000000 bg:#44aaaa'
+completion-menu.meta.completion = '#ffffff bg:#44aaaa'
+completion-menu.multi-column-meta = '#000000 bg:#aaffff'
+scrollbar.arrow = 'bg:#3a3a3a'
+#两端
+scrollbar = 'bg:#444444'
+#底部状态栏
+bottom-toolbar = '#aaaaaa bg:#3a3a3a'
+bottom-toolbar.off = '#888888 bg:#ffffff'
+bottom-toolbar.on = '#005f00 bg:#afdf00'
+bottom-toolbar.transaction.valid = '#00ff5f bg:#3a3a3a bold'
+bottom-toolbar.transaction.failed = '#ff0000 bg:#3a3a3a bold'
+#vi查找(reverse-i-search)
+search-toolbar = 'noinherit bold #00ffff bg:#3a3a3a'
+search-toolbar.text = 'nobold #ffffff bg:#3a3a3a'
+#查找命令找到的部分着色
+search = '#ffffff bg:#4444aa' 
+search.current = '#ffffff bg:#44aa44' 
+system-toolbar = 'noinherit bold bg:#3a3a3a'
+selected = '#ffffff bg:#6666aa'
+arg-toolbar = 'noinherit bold' 
+arg-toolbar.text = 'nobold' 
+# 输出表格时的颜色
+output.header = "#005f00 bg:#afdf00 bold"
+output.odd-row = "#44aaaa bg:#3a3a3a"
+output.even-row = "#ffffff bg:#3a3a3a"
+
+# Favorite queries.
+[favorite_queries]
+
+# Use the -d option to reference a DSN.
+# Special characters in passwords and other strings can be escaped with URL encoding.
+[alias_dsn]
+# example_dsn = mysql://[user[:password]@][host][:port][/dbname]

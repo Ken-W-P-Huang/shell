@@ -1,0 +1,20 @@
+########################################################################################################################
+#  text
+########################################################################################################################
+text/rtf; less '%s'; needsterminal
+text/plain; less '%s'; needsterminal
+#https://github.com/neomutt/neomutt/issues/717
+text/html; xdg-open  %s & sleep 1; test=test -n "$DISPLAY" ; nametemplate=%s.html ; copiousoutput;needsterminal
+text/html; w3m -I %{charset} -v -F -T text/html %s; edit=vim; compose=vim; nametemplate=%s.html; copiousoutput;needsterminal
+########################################################################################################################
+#  application
+########################################################################################################################
+application/* ; xdg-open %s ; copiousoutput
+########################################################################################################################
+#  media
+########################################################################################################################
+image/*	; xdg-open %s ; copiousoutput
+audio/* ; xdg-open %s ; copiousoutput
+video/* ; xdg-open %s ; copiousoutput
+ 
+

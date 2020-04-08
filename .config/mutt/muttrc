@@ -1,0 +1,142 @@
+#http://www.mutt.org/doc/manual
+set my_global_config_dir="$HOME/.config/mutt"
+set my_global_mail_dir="/Volumes/Work/doc/mail"
+set my_save_path="/Volumes/Download/mail/"
+source "/bin/mkdir -pv \"$my_save_path\""|
+########################################################################################################################
+#  通用设置
+########################################################################################################################
+#push <show-version>  # 显示mutt版本信息
+#set tmpdir = "$my_global_mail_dir/tmp"			 #显示和编写邮件时的所需文件的临时存放路径。文件夹必须存在
+set message_cachedir="$my_global_mail_dir/message_cache" #来自IMAP和POP服务器的消息缓存的存放路径
+set header_cache="$my_global_mail_dir/header_cache"	 #header缓存数据库。使用目录时，每个文件一个数据库
+set certificate_file="$my_global_mail_dir/certificates"	 #信任证书的存放路径	
+########################################################################################################################
+#  邮件
+######################################################################################################################## 
+#邮件头（Subject: From: Date: To: CC: BCC: Reply-To: Newsgroups: Followup-to: X-Lable: Organization: User-Agent: X-Mailer: X-PGP-Key:）
+ignore *						# 忽略所有的邮件头
+unignore from: to: cc: date: subject:			# 指定需要显示的邮件头
+hdr_order from: to: cc: date: subject:			# 邮件头信息显示顺序
+my_hdr From:         					# 缺省的发件地址
+my_hdr Reply-To:     					# 缺省的回复地址
+#名称
+set reverse_alias=yes 					#是否将邮箱地址显示为别名
+set reverse_name=yes					#移动邮件到另一台别名解析不同的机器时，将别名解析为原始地址。
+set reverse_realname=yes 				#对reverse_name微调。不设置会移除匹配地址的名称
+set forward_quote 					#是否在转发邮件中插入转发的信息
+#内容
+set content_type="text/html"
+set include=yes                             		# 回信时包含原文
+set indent_str="> "                         		# 回信的引文之前插入符号 >
+set send_multipart_alternative
+set send_multipart_alternative_filter=
+#auto_view text/plain  					
+#auto_view text/html					#自动显示HTML附件,会自动打开浏览器
+#auto_view text/x-vcard         			# 自动打开vcard附件
+#set implicit_autoview=yes      			# mailcap中标为'copiousoutput'的项目附件将自动打开
+alternative_order text/plain text/enriched text/html application/postscript image/* # HTML 是最后的选择
+set smart_wrap                            		# 禁止从单词中间断行
+set nomarkers                             		# 禁止换行标记
+set pager_stop="yes"					# Text view first，Don't skip msgs on next page
+#set nosig_dashes		#取消签名前的“--\n”,建议不要取消，否则可能无法识别签名。	
+########################################################################################################################
+#  外观样式
+######################################################################################################################## 
+set to_chars = " +TCFL"		# 表明邮件是否发送给当前帐号（CC，BCC）所使用的字符
+set status_on_top    		# 状态栏在上面
+set pager_context=2  		# 翻页时保留前一页两行内容
+set pager_index_lines=6       	# 看信时，在 index 留出多少行显示邮件列表？
+set pager_stop			# internal-pager不会在邮件尾部处自动切换到下一封邮件
+set nomenu_scroll		# 按行页滚动，否则按行
+set sidebar_delim_chars='/'
+set sidebar_divider_char=" "
+set sidebar_folder_indent=no
+set sidebar_format="%B%*  %n"
+set sidebar_indent_string="  "
+set sidebar_new_mail_only=no
+set sidebar_next_new_wrap=no
+set sidebar_short_path=no
+set sidebar_sort_method= alpha
+set sidebar_visible
+set sidebar_width=20
+########################################################################################################################
+#  默认行为
+########################################################################################################################
+set thorough_search	#先对邮件头，内容和附件解码，再进行查找。
+set thread_received	#使用接收日期而非发送日期
+#打印
+set print_command     = "enscript -p - | psselect -r | lp"
+#pipe
+set pipe_decode
+# 对收到的邮件进行打分和排序
+score "~N" +4                               	# 新信件 +4 分
+score "~s 通知" +2                          	# 主题包含“通知”的 +2
+score "~s Circulation" +3                   	# 主题包含 “Circulation” +3
+score "~D" -5                               	# 已经标记删除的 -5
+score "~O" +1                               	# 上次没有读的 +1
+score "~s believe" -10                      	# 包含 believe 的 -10，垃圾广告！
+#排序
+#date or date-sent date-received from mailbox-order score size spam subject threads to
+set sort= reverse-date-received          			# 按话题对邮件排序
+set sort_aux=  from            # 邮件按日期由近及远排列
+#address alias unsorted
+set sort_alias=alias 				# 指定“alias”菜单的内容如何排序
+set sort_browser="reverse-date"			# file browser排序
+#unset sort_re
+unset collapse_unread				# 取消折叠未读邮件
+#编辑邮件
+set edit_headers=yes                      # 允许编辑邮件头
+set header=no                             # 回复时不加入邮件头
+set use_from=yes			  # 让 msmtp 知道使用哪个帐号
+set envelope_from=yes			  # 让 mutt 使用 msmtp 的 -f 选项
+set move=no				  # 邮件保留在 $MAIL,不移动
+set nomark_old                            # 未读新邮件别标注为旧邮件
+set copy                                  # 保留已发邮件的备份
+set mime_forward                          # 转发的邮件 MIME 附件
+set nostrict_threads                      # Lets have some fuzzy threading
+set sendmail_wait=3                       # 等待sendmail指令完成时间，期间有问题则报错；如未完成，则进入后台发送。直接进入后台不会报错。
+set fcc_clear                             # Keep fcc's clear of signatues and encryption
+set nopipe_decode                         # Don't decode messages when piping
+set tilde                                 # 使用 ~ 填充空白行
+set read_inc=100                          # Read counter ticks every 100 msgs
+set write_inc=100                         # Write counter ticks every 100 msgs
+set noconfirmappend                       # 自动下载邮件，不提示
+set resolve=yes                           # 按 "t" 或 "D" 时，自动移动光标到下封信件
+set fast_reply                            # 按 "r" 回信时，直接进入编辑模式,回复时不询问回复地址
+set quit=yes                              # 退出时，直接退出
+set postpone=ask-no                       # 推迟发送
+set delete=ask-yes                        # 删除前询问
+#set quit=ask-yes			  # 退出前询问，此时fetchmail早已经退出
+ignore x-mailer                           # 忽略 x-mailer 邮件头
+## 监视下面几个邮箱，随时报告新邮件
+set beep_new=yes                          # 来新邮件时，蜂鸣
+set check_new=yes                         # 查是否有新邮件
+set timeout=30
+set askcc
+set askbcc
+#set reply_to	#回复给Reply-to地址
+#退出
+unset mark_old 				  #退出时不将未读信息标记为old
+set wait_key=yes                         # 外部程序退出时，要求用户按键返回
+########################################################################################################################
+#  关联程序
+########################################################################################################################
+set editor = 'vim '+/^$' -c "set textwidth=72" -c "set wrap" -c "set nocp" '
+#set ispell = "/usr/bin/ispell"
+#set ispell = "aspell -e -c"
+#set dotlock_program="/usr/local/bin/mutt_dotlock"
+########################################################################################################################
+#  帐号切换
+######################################################################################################################## 
+macro generic "<esc>1" ":source $my_global_config_dir/accounts/xx@xx/user.muttrc\n"
+#macro generic "<esc>2" ":set "
+source $my_global_config_dir/accounts/xx@xx/user.muttrc
+#需要用到user.muttrc定义的变量
+source $my_global_config_dir/keymap.muttrc
+set mail_check=$my_scan_interval                        # 指定查看是否有新邮件的时间间隔 
+
+
+
+
+

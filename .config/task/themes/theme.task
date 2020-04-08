@@ -1,0 +1,74 @@
+# General decoration
+# 以下两行为表格标题
+color.label=color022 on color148 
+color.label.sort=color022 on color148 
+color.alternate=color030 on color237 
+#刚开始提示信息
+color.header=color188 on color237
+color.footnote=color188 on color237
+color.warning=bold yellow on color237 
+color.error=color009 on color237 
+color.debug=blue on color237
+
+# Task state
+color.active=color009 on color237
+color.blocked=white on color237
+color.blocking=black on color237
+color.completed=color231 on color237
+color.deleted=color231 on color237
+color.recurring=rgb013 on color237
+color.scheduled=on color231 on color237
+color.until=on color231 on color237
+
+# Project
+# 默认color007
+#color.project.none=color007 on color237
+
+# Priority
+color.uda.priority.H=color255 on color237
+color.uda.priority.M=color250 on color237
+color.uda.priority.L=color245 on color237
+
+# Tags
+color.tag.next=rgb440 on color237
+color.tag.none=on color231 on color237
+color.tagged=rgb031 on color237
+
+# Due
+color.due=color231 on color237
+color.due.today=rgb400 on color237
+color.overdue=color9 on color237
+
+# Report: burndown
+color.burndown.done=color231 on color010
+color.burndown.pending=color231 on color009
+color.burndown.started=color231 on color011
+
+# Report: history
+color.history.add=color231 on color011
+color.history.delete=color231 on color009
+color.history.done=color231 on color010
+
+# Report: summary
+color.summary.background=white on color237
+color.summary.bar=black on color237
+
+# Command: calendar
+color.calendar.due=color231 on color009
+color.calendar.due.today=color231 on color197
+color.calendar.overdue=color231 on color013
+color.calendar.holiday=color231 on color003
+color.calendar.today=color231 on color004
+color.calendar.weekend=on color007
+color.calendar.weeknumber=color014
+
+# Command: sync
+color.sync.added=rgb010 on color237
+color.sync.changed=color11 on color237
+color.sync.rejected=color9 on color237
+
+# Command: undo
+color.undo.after=color2 on color237
+color.undo.before=color1 on color237
+
+

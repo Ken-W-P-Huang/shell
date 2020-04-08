@@ -1,0 +1,33 @@
+#https://newsboat.org/releases/2.19/docs/newsboat.html#_example_configuration
+include "~/.config/newsboat/colors/colors.newsboat"
+include "~/.config/newsboat/keymap.newsboat"
+# -- feeds ---------------------------------------------------------------------
+auto-reload yes
+reload-time 120
+reload-threads 4
+download-retries 4
+download-timeout 10
+prepopulate-query-feeds yes
+# -- display -------------------------------------------------------------------
+show-read-feeds no
+feed-sort-order unreadarticlecount-asc
+text-width 80
+# -- navigation ----------------------------------------------------------------
+goto-next-feed no
+browser "open -g -a 'Google Chrome' %u"
+# -- bookmarks -----------------------------------------------------------------
+bookmark-cmd ~/.config/newsboat/bookmark.sh
+bookmark-interactive no
+bookmark-autopilot yes
+# -- misc ----------------------------------------------------------------------
+confirm-exit no
+cleanup-on-quit no
+cache-file ~/.cache/newsboat/cache.db
+cookie-cache ~/.cache/newsboat/cookies.txt
+error-log ~/.local/share/newsboat/error.log
+feedhq-passwordfile ~/.local/share/newsboat/feedhq-pw.txt
+inoreader-passwordfile ~/.local/share/newsboat/inoreader-pw.txt
+newsblur-passwordfile ~/.local/share/newsboat/newsblur-pw.txt
+ocnews-passwordfile ~/.local/share/newsboat/ocnews-pw.txt
+oldreader-passwordfile ~/.local/share/newsboat/oldreader-pw.txt
+ttrss-passwordfile ~/.local/share/newsboat/ttrss-pw.txt

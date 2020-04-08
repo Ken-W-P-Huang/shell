@@ -1,0 +1,75 @@
+# general ------ foreground ---- background ---- regexp-------------
+color error      color009        color237        #错误消息
+color indicator  color231        color24         #选中行
+color markers    color210        color237        #the “+” markers at the beginning of wrapped lines in the pager
+color message    color231        color237        #提示信息
+color prompt     color231        color237        #命令模式提示符：
+color search     color084        color237
+color quoted     brightblue      color237        #正文引用其他邮件的内容
+color status     color022        color148        #状态栏信息
+color tilde      color231        color237
+color tree       color109        color237        #树形图，如thread
+color normal     color188        color237        #背景色
+color header     color231        color000        ^Subject:.* #page页面邮件标题栏 
+color hdrdefault color223        color237        #编辑邮件页面消息头默认颜色    
+color attachment color174        color237        #Add-ons to the message
+color signature  color223        color237
+
+# sidebar -------------- foreground --- background ---- regexp-------------
+color sidebar_divider    color231       color000        #分割列
+color sidebar_flagged    color231       color237
+color sidebar_highlight  color231       color237
+color sidebar_indicator  color231       color238
+color sidebar_new        color009       color237        #含有新邮件的邮箱
+color sidebar_spoolfile  color231       color237
+
+# index ------- foreground ---- background ---- regexp-------------
+color index bold color009        color237       ~U # 未读邮件
+#color index     color188        color237       ~A
+#color index     color228        color237       ~N # New
+#color index     color174        color237       ~F # Flagged
+#color index     color174        color237       ~T # Tagged
+color index      color223        color237       ~O # Old
+#color index     color108        color237       ~P # 来自本人的邮件
+#color index     color210        color237       ~D # 已删除的邮件
+#color index     color212        color237       ~Q # 已回复的邮件
+# compose ----------------------------- foreground ---- background ---- regexp-------------
+color compose  header        bold       color109        color237 #Pager页面邮件头部标题
+color compose  security_encrypt         color009        color237 #Pager页面的安全性选项内容
+color compose  security_sign            color009        color237 
+color compose  security_both            color009        color237 
+color compose  security_none            color009        color237 #Pager页面的安全性选项内容:无
+# index ------- foreground ---- background ---- regexp-------------
+# gpg
+color body       color188       color237        "^gpg: Good signature.*"
+color body       color115       color236        "^gpg: BAD signature.*"
+color body       color174       color237        "^gpg: Can't check signature.*"
+color body       color174       color237        "^-----BEGIN PGP SIGNED MESSAGE-----"
+color body       color174       color237        "^-----BEGIN PGP SIGNATURE-----"
+color body       color174       color237        "^-----END PGP SIGNED MESSAGE-----"
+color body       color174       color237        "^-----END PGP SIGNATURE-----"
+color body       color174       color237        "^Version: GnuPG.*"
+color body       color174       color237        "^Comment: .*"
+# url, email and web stuff
+color body       color174       color237        "(finger|ftp|http|https|news|telnet)://[^ >]*"
+color body       color174       color237        "<URL:[^ ]*>"
+color body       color174       color237        "www\\.[-.a-z0-9]+\\.[a-z][a-z][a-z]?([-_./~a-z0-9]+)?"
+color body       color174       color237        "mailto: *[^ ]+\(\\i?subject=[^ ]+\)?"
+color body       color174       color237        "[-a-z_0-9.%$]+@[-a-z_0-9.]+\\.[-a-z][-a-z]+"
+color body       color231       color237        [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+               # email addresses
+color body       color228       color237        (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+        # URLs
+color body       color231       color237        (^|[[:space:]])\\*[^[:space:]]+\\*([[:space:]]|$) # *bold* text
+color body       color231       color237        (^|[[:space:]])_[^[:space:]]+_([[:space:]]|$)     # _underlined_ text
+color body       color231       color237        (^|[[:space:]])/[^[:space:]]+/([[:space:]]|$)     # /italic/ text
+
+# quote ------- foreground ---- background ---- regexp-------------
+color quoted     color108       color237
+color quoted1    color116       color237
+color quoted2    color247       color237
+color quoted3    color108       color237
+color quoted4    color116       color237
+color quoted5    color247       color237
+color quoted6    color108       color237
+color quoted7    color116       color237
+color quoted8    color247       color237
+color quoted9    color108       color237

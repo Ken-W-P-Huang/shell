@@ -1,0 +1,282 @@
+# reference agnoster's Theme - https://gist.github.com/3712874
+# Characters «»±˖˗‑‐‒ ━ ✚‐↔←↑↓→↭⇎⇔⋆━◂▸◄►◆☀★☗☊✔✖❮❯⚑⚙
+SEGMENT_SEPARATOR=""
+PLUSMINUS="±"
+BRANCH=""
+DETACHED="➦"
+CROSS="✖"
+LIGHTNING="⚡"
+GEAR="⚙"
+HEART='♥'
+MODIFIED='✹'
+COLOR_RED=9
+COLOR_YELLOW=11
+COLOR_CYAN=14
+COLOR_WHITE=231
+COLOR_GREEN=10
+COLOR_MAGENTA=200
+COLOR_BLACK=232
+COLOR_GRAY=237
+DEFAULT_FOREGROUND=232
+DEFAULT_BACKGROUND=231
+THIRD_BACKGROUND=$COLOR_GRAY
+if [[ -z "$SYMBOL_SYSTEM" ]]; then
+  case "$(uname)" in
+      Darwin)   SYMBOL_SYSTEM='';;
+      Linux)    SYMBOL_SYSTEM='';;
+      Windows)  SYMBOL_SYSTEM='';;
+      *)        SYMBOL_SYSTEM='%';;
+  esac
+fi
+function Prompt.segment() {
+    if [[ -n $4 ]]; then
+        local content=" $4 " \
+        font=${1:-1} segment
+        [[ -n $2 ]] && foreground="38;05;$2" || foreground=""
+        if [[ -n $3 ]]; then
+            background="48;05;$3"
+            separatorForeground="38;05;$3"
+        else
+            background=""
+        fi
+        segment="\e[$font;$foreground;${background}m$content"
+        if [[ -n $5 ]]; then
+            segment=$segment"\e[$font;$separatorForeground;48;05;$5m$SEGMENT_SEPARATOR"
+        fi
+        echo $segment
+    fi
+}
+
+# End the prompt, closing any open segments
+function Prompt.end() {
+  echo "\e[0m"
+}
+
+
+
+# Battery Level
+function Prompt.battery() {
+    if [[ $(uname) == "Darwin" ]] ; then
+        function battery_is_charging() {
+            [ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]
+        }
+
+        function battery_pct() {
+            local smart_battery_status="$(ioreg -rc "AppleSmartBattery")"
+            typeset -F maxcapacity=$(echo $smart_battery_status | grep '^.*"MaxCapacity"\ =\ ' | sed -e 's/^.*"MaxCapacity"\ =\ //')
+            typeset -F currentcapacity=$(echo $smart_battery_status | grep '^.*"CurrentCapacity"\ =\ ' | sed -e 's/^.*CurrentCapacity"\ =\ //')
+            echo $((currentcapacity/maxcapacity * 100))
+        }
+
+        function battery_pct_remaining() {
+            if battery_is_charging ; then
+                battery_pct
+            else
+                echo "External Power"
+            fi
+        }
+
+        function battery_time_remaining() {
+            local smart_battery_status="$(ioreg -rc "AppleSmartBattery")"
+            if [[ $(echo $smart_battery_status | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]] ; then
+                timeremaining=$(echo $smart_battery_status | grep '^.*"AvgTimeToEmpty"\ =\ ' | sed -e 's/^.*"AvgTimeToEmpty"\ =\ //')
+                if [ $timeremaining -gt 720 ] ; then
+                    echo "::"
+                else
+                    echo "~$((timeremaining / 60)):$((timeremaining % 60))"
+                fi
+            fi
+        }
+    fi
+
+    if [[ $(uname) == "Linux" && -d /sys/module/battery ]] ; then
+        function battery_is_charging() {
+            ! [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]]
+        }
+
+        function battery_pct() {
+            return
+#            if (( $+commands[acpi] )) ; then
+#                echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
+#            fi
+        }
+
+        function battery_pct_remaining() {
+            if [ ! $(battery_is_charging) ] ; then
+                battery_pct
+            else
+                echo "External Power"
+            fi
+        }
+
+        function battery_time_remaining() {
+            if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
+                echo $(acpi | cut -f3 -d ',')
+            fi
+        }
+    fi
+    b=$(battery_pct_remaining)
+    if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] || [[ $(ioreg -rc AppleSmartBattery | grep -c '^.*"ExternalConnected"\ =\ No') -eq 1 ]]; then
+        if [ $b -gt 50 ] ; then
+            echo -n "\e[38;05;${COLOR_GREEN}m $HEART$(battery_pct_remaining)"
+        elif [ $b -gt 20 ] ; then
+            echo -n "\e[38;05;${COLOR_YELLOW}m $HEART$(battery_pct_remaining)"
+        else
+            echo -n "\e[38;05;${COLOR_RED}m $HEART$(battery_pct_remaining)"
+        fi
+    fi
+}
+
+
+function Prompt.gitDirty {
+  [[ $(git status --porcelain | wc -l) -gt 0 ]] && echo "*"
+}
+
+function Prompt.getVCSInfo(){
+    local rev status st=""
+    if $(hg id >/dev/null 2>&1); then
+        if $(hg prompt >/dev/null 2>&1); then
+            st=$(hg prompt "☿ {rev}@{branch}")
+            if [[ $(hg prompt "{status|unknown}") = "?" ]]; then
+                # if files are not added
+                st=$st"\e[38;05;${COLOR_RED}m $PLUSMINUS"
+            elif [[ -n $(hg prompt "{status|modified}") ]]; then
+                # if any modification
+                st=$st"\e[38;05;${COLOR_YELLOW}m $PLUSMINUS"
+            fi
+        else
+            rev=$(hg id -n 2>/dev/null | sed 's/[^-0-9]//g')
+            branch=$(hg id -b 2>/dev/null)
+            st="☿ $rev@$branch"
+            if `hg st | grep -q "^\?"`; then
+                st=$st"\e[38;05;${COLOR_RED}m $PLUSMINUS"
+            elif `hg st | grep -q "^[MA]"`; then
+                st=$st"\e[38;05;${COLOR_YELLOW}m $PLUSMINUS"
+            fi
+
+        fi
+    fi
+
+    local ref dirty mode repo_path clean has_upstream
+    local modified untracked added deleted tagged stashed
+    local ready_commit git_status bgclr fgclr
+    local commits_diff commits_ahead commits_behind has_diverged to_push to_pull
+    repo_path=$(git rev-parse --git-dir 2>/dev/null)
+    if $(git rev-parse --is-inside-work-tree >/dev/null 2>&1); then
+        dirty=$(Prompt.gitDirty)
+        git_status=$(git status --porcelain 2> /dev/null)
+        ref=$(git symbolic-ref HEAD 2> /dev/null) || ref="➦ $(git rev-parse --short HEAD 2> /dev/null)"
+        if [[ -n $dirty ]]; then
+            clean=''
+        else
+            clean="\e[38;05;${COLOR_GREEN}m ✔"
+        fi
+        local upstream=$(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} 2> /dev/null)
+        if [[ -n "${upstream}" && "${upstream}" != "@{upstream}" ]]; then
+            has_upstream=true;
+        fi
+        local current_commit_hash=$(git rev-parse HEAD 2> /dev/null)
+        local number_of_untracked_files=$(\grep -c "^??" <<< "${git_status}")
+        # if [[ $number_of_untracked_files -gt 0 ]]; then untracked=" $number_of_untracked_files◆"; fi
+        if [[ $number_of_untracked_files -gt 0 ]]; then
+            untracked="\e[38;05;${COLOR_RED}m ☀:$number_of_untracked_files";
+        fi
+        local number_added=$(\grep -c "^A" <<< "${git_status}")
+        if [[ $number_added -gt 0 ]]; then
+            added="\e[38;05;${COLOR_RED}m ✚:$number_added";
+        fi
+        local number_modified=$(\grep -c "^.M" <<< "${git_status}")
+        if [[ $number_modified -gt 0 ]]; then
+            modified="\e[38;05;${COLOR_RED}m ✹:${number_modified}"
+        fi
+        local number_added_modified=$(\grep -c "^M" <<< "${git_status}")
+        local number_added_renamed=$(\grep -c "^R" <<< "${git_status}")
+        if [[ $number_modified -gt 0 && $number_added_modified -gt 0 ]]; then
+            modified="$modified$((number_added_modified+number_added_renamed))$PLUSMINUS"
+        elif [[ $number_added_modified -gt 0 ]]; then
+            modified="\e[38;05;${COLOR_RED}m ✹:$((number_added_modified+number_added_renamed))$PLUSMINUS"
+        fi
+
+        local number_deleted=$(\grep -c "^.D" <<< "${git_status}")
+        if [[ $number_deleted -gt 0 ]]; then
+            deleted="\e[38;05;${COLOR_RED}m ‒:$number_deleted"
+        fi
+        local number_added_deleted=$(\grep -c "^D" <<< "${git_status}")
+        if [[ $number_deleted -gt 0 && $number_added_deleted -gt 0 ]]; then
+            deleted="$deleted$number_added_deleted$PLUSMINUS"
+        elif [[ $number_added_deleted -gt 0 ]]; then
+            deleted=" ‒$number_added_deleted$PLUSMINUS"
+        fi
+
+        local tag_at_current_commit=$(git describe --exact-match --tags $current_commit_hash 2> /dev/null)
+        if [[ -n $tag_at_current_commit ]]; then
+            tagged=" ☗:$tag_at_current_commit ";
+        fi
+        local number_of_stashes="$(git stash list -n1 2> /dev/null | wc -l)"
+        if [[ $number_of_stashes -gt 0 ]]; then
+            stashed="\e[38;05;${COLOR_MAGENTA}m  ⚙:${number_of_stashes##*(  )}"
+        fi
+        if [[ $number_added -gt 0 || $number_added_modified -gt 0 || $number_added_deleted -gt 0 ]]; then
+            ready_commit=' ⚑';
+        fi
+        local upstream_prompt=''
+        if [[ $has_upstream == true ]]; then
+            commits_diff="$(git log --pretty=oneline --topo-order --left-right ${current_commit_hash}...${upstream} 2> /dev/null)"
+            commits_ahead=$(\grep -c "^<" <<< "$commits_diff")
+            commits_behind=$(\grep -c "^>" <<< "$commits_diff")
+            upstream_prompt="$(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} 2> /dev/null)"
+            upstream_prompt=$(sed -e 's/\/.*$/ ☊ /g' <<< "$upstream_prompt")
+        fi
+        has_diverged=false
+        if [[ $commits_ahead -gt 0 && $commits_behind -gt 0 ]]; then
+            has_diverged=true;
+        fi
+        if [[ $has_diverged == false && $commits_ahead -gt 0 ]]; then
+            to_push="\e[38;05;${COLOR_BLACK}m  ↑:$commits_ahead"
+        fi
+        if [[ $has_diverged == false && $commits_behind -gt 0 ]]; then
+            to_pull="\e[38;05;${COLOR_MAGENTA}m  ↓:$commits_behind";
+        fi
+
+        if [[ -e "${repo_path}/BISECT_LOG" ]]; then
+            mode=" <B>"
+        elif [[ -e "${repo_path}/MERGE_HEAD" ]]; then
+            mode=" >M<"
+        elif [[ -e "${repo_path}/rebase" || -e "${repo_path}/rebase-apply" || -e "${repo_path}/rebase-merge" || -e "${repo_path}/../.dotest" ]]; then
+            mode=" >R>"
+        fi
+        st=$st"${ref/refs\/heads\//$BRANCH $upstream_prompt}${mode}$to_push$to_pull$clean$tagged$stashed$untracked$modified$deleted$added$ready_commit"
+    fi
+    [[ -n $st ]] && echo "($st\e[38;05;${COLOR_WHITE}m)"
+}
+
+function Prompt.show() {
+    local sign=$1
+    local code=$2 userType prompt secondSegment="J:${sign}j C:${sign}!" 
+    if [[ $SHELL_NAME == "zsh" ]]; then
+        if [[ $UID -eq 0 ]]; then
+            userType='#'
+        else
+            userType='$'
+        fi
+        prompt=`Prompt.segment "" 22 148 "$SYMBOL_SYSTEM $USER@${sign}m tty${sign}l$userType"  24`
+    elif [[ $SHELL_NAME == "bash" ]]; then
+        prompt=`Prompt.segment "" 22 148 "$SYMBOL_SYSTEM $USER@${sign}H ${sign}l${sign}$"  24`
+    fi
+    if [[ $code -ne 0 ]]; then
+        secondSegment=$secondSegment"\e[38;05;${COLOR_RED}m $CROSS:$code"
+    fi
+    prompt=$prompt`Prompt.segment "" $COLOR_WHITE 24 "$secondSegment" $THIRD_BACKGROUND`
+    #如果当前目录是～，会引起格式错误
+    prompt=$prompt`Prompt.segment "" $COLOR_WHITE $THIRD_BACKGROUND "$PWD$(Prompt.getVCSInfo)"  $DEFAULT_BACKGROUND`
+    prompt=$prompt`Prompt.end`
+    echo $prompt
+}
+if [[ $SHELL_NAME == "zsh" ]]; then
+    PROMPT='%{%f%b%k%}$(Prompt.show % $?) '
+elif [[ $SHELL_NAME == "bash" ]]; then
+    shopt -s promptvars
+    PROMPT_COMMAND='PS1=$(Prompt.show \\ $?)'
+fi
+
+

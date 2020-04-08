@@ -1,0 +1,104 @@
+
+########################################################################################################################
+#  变量
+########################################################################################################################
+set my_username = ""
+set my_domain = ""
+set my_address = "$my_username@$my_domain"
+set my_account = $my_address
+set my_config_dir = $my_global_config_dir/accounts/$my_account
+set my_password=""  
+set my_fetchmail_server=
+set my_fetchmail_port=
+set my_fetchmail_protocol= 
+set my_alias_file="$my_config_dir/aliases"
+set my_scan_interval=60
+########################################################################################################################
+#  引入配置
+########################################################################################################################
+source $my_global_config_dir/themes/theme.muttrc
+source $my_global_config_dir/lang/zh_CN
+source $my_config_dir/hooks
+source $my_alias_file
+
+########################################################################################################################
+#  账号
+########################################################################################################################
+# 发送者账号
+set realname=""
+set from="$my_account"
+set signature="$my_config_dir/signature/mutt.html"             
+set alias_file=$my_alias_file
+set mailcap_path = "$my_global_config_dir/mailcap/macos"		#如何打开附件的查找位置
+########################################################################################################################
+#  邮箱路径
+########################################################################################################################
+set folder = "$my_global_mail_dir/$my_account"
+set mbox_type = Maildir
+set spoolfile = +"inbox"
+set mbox=+"seen"
+set record=+"sent"
+set postponed=+"draft"
+set trash = +"trash"
+mailboxes $spoolfile  $record $postponed $trash +"xx" 
+########################################################################################################################
+#  按键
+########################################################################################################################
+macro index,pager gc  "<change-folder> +""<enter>" 
+macro index,pager gj  "<change-folder> +""<enter>" 
+macro index,pager gf  "<change-folder> +""<enter>"
+macro index,pager gw  "<change-folder> +""<enter>"
+########################################################################################################################
+#  第三方
+########################################################################################################################
+set my_mda = "/usr/local/bin/procmail -m \
+	MY_GLOBAL_MAIL_DIR=$my_global_mail_dir \
+	MY_ADDRESS=$my_address \
+	$my_config_dir/conf/procmail.conf"
+#参数和配置文件同时存在时，参数优先于配置
+source "/usr/local/bin/fetchmail -q"|
+source "echo \"poll pophm.qiye.163.com pass $my_password\" | \
+	/usr/local/bin/fetchmail  --daemon $my_scan_interval \
+	--logfile $my_global_mail_dir/$my_account/log/fetchmail.log \
+	-f - --username $my_account \
+	--auth password \
+	--mda '$my_mda' \
+	--keep \
+	--nosslcertck \
+	--batchlimit 100 \
+	--antispam -1 \
+	--nobounce \
+	--invisible \
+	"|
+ 
+#set sendmail = "/usr/local/bin/msmtp -C $my_config_dir/conf/msmtp.conf"
+set sendmail = "/usr/local/bin/msmtp  \
+    --logfile=$my_global_mail_dir/$my_account/log/msmtp.log \
+    --port=25 \
+    --protocol=smtp \
+    --auth=login \
+    --tls=off \
+    --host=smtphm.qiye.163.com \
+    --tls-certcheck=off \
+    --from=$my_account \
+    --user=$my_account \
+    --passwordeval=$my_config_dir/conf/password.sh  "
+########################################################################################################################
+#  IMAP
+########################################################################################################################
+#set imap_user="$my_account"
+#set imap_pass=$my_password
+#set imap_check_subscribed="yes"
+#set imap_list_subscribed="yes"
+#set imap_keepalive=180
+#set imap_idle
+########################################################################################################################
+#  SMTP
+########################################################################################################################
+#set smtp_pass = $my_password
+#set hostname = $my_domain
+#set smtp_url = "smtp://$my_account:587/"
+#set ssl_force_tls = yes
+#set smtp_authenticators = "login"
+#set ssl_use_sslv3=yes
+set imap_servernoise = yes
